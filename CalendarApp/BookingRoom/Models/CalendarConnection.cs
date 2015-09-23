@@ -10,6 +10,9 @@ using System.Web;
 
 namespace BookingRoom.Models
 {
+    /// <summary>
+    /// Class for creating Google Caledar Service
+    /// </summary>
     public class CalendarConnection
     {
         private string serviceEmail;
@@ -17,9 +20,9 @@ namespace BookingRoom.Models
         private ServiceAccountCredential credential;
         private BaseClientService.Initializer initializer;
         private CalendarService service;
-
-        public byte[] StartPath { get; private set; }
-
+        /// <summary>
+        /// Constructor for connecting to Gmail Account
+        /// </summary>
         public CalendarConnection()
         {
             serviceEmail = "1022042832033-glqi5vrlgh0gtpcdg620nkrg4hs65835@developer.gserviceaccount.com";
@@ -34,7 +37,9 @@ namespace BookingRoom.Models
             initializer.ApplicationName = "CalendarApp";
             service = new CalendarService(initializer);
         }
-
+        /// <summary>
+        /// Returns Calendar Service
+        /// </summary>
         public CalendarService GoogleCalendar
         {
             get { return service; }
