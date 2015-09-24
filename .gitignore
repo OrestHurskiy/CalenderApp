@@ -112,6 +112,7 @@ test-results/
 
 # User-specific files
 *.suo
+CalendarApp/*.suo
 *.user
 *.sln.docstates
 
