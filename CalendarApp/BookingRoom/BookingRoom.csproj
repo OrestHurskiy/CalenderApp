@@ -136,6 +136,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DisplayController.cs" />
     <Compile Include="Controllers\PostingController.cs" />
+    <Compile Include="Controllers\UpdatingController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
