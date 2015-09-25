@@ -134,11 +134,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\DisplayController.cs" />
     <Compile Include="Controllers\PostingController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CalendarConnection.cs" />
+    <Compile Include="Models\Displaying\EventDto.cs" />
     <Compile Include="Models\Posting\EventForAdding.cs" />
     <Compile Include="Models\Posting\EventTime.cs" />
     <Compile Include="Models\Posting\PostingExtension.cs" />
