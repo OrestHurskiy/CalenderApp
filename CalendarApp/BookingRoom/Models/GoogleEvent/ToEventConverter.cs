@@ -1,9 +1,5 @@
 ﻿using BookingRoom.Models.GoogleCalendar;
 using Google.Apis.Calendar.v3.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace BookingRoom.Models.GoogleEvent
 {
@@ -11,19 +7,20 @@ namespace BookingRoom.Models.GoogleEvent
     {
         public static Event ToEvent(CalendarEvent eventForConverting)
         {
-           Event _newEvent = new Event();
-            _newEvent.Summary = eventForConverting.Summary;
-            _newEvent.Description = eventForConverting.Description;
-            _newEvent.Start = new EventDateTime()
+            Event newEvent = new Event
             {
-                DateTime = eventForConverting.Start.ToDateTime()
+                Summary = eventForConverting.Summary,
+                Description = eventForConverting.Description,
+                Start = new EventDateTime
+                {
+                    DateTime = eventForConverting.Start.ToDateTime()
+                },
+                End = new EventDateTime()
+                {
+                    DateTime = eventForConverting.End.ToDateTime()
+                }
             };
-            _newEvent.End = new EventDateTime()
-            {
-                DateTime = eventForConverting.End.ToDateTime()
-            };
-
-            return _newEvent;
+            return newEvent;
         }
     }
 }

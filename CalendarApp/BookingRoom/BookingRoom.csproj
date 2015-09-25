@@ -163,15 +163,18 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityWebApiActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\DeleteController.cs" />
-    <Compile Include="Controllers\DisplayController.cs" />
-    <Compile Include="Controllers\EventController.cs" />
+    <Compile Include="Controllers\DeleteEventController.cs" />
+    <Compile Include="Controllers\DisplayEventController.cs" />
+    <Compile Include="Controllers\BaseEventController.cs" />
     <Compile Include="Controllers\PostEventController.cs" />
-    <Compile Include="Controllers\SearchController.cs" />
-    <Compile Include="Controllers\UpdateController.cs" />
+    <Compile Include="Controllers\SearchEventController.cs" />
+    <Compile Include="Controllers\UpdateEventController.cs" />
+    <Compile Include="Filters\GoogleExceptionFilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\AppSetingsConst.cs" />
+    <Compile Include="Helpers\AppSettingsHelper.cs" />
     <Compile Include="Models\GoogleEvent\CalendarEvent.cs" />
     <Compile Include="Models\GoogleEvent\EventTime.cs" />
     <Compile Include="Models\GoogleEvent\ToEventConverter.cs" />

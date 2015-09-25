@@ -4,22 +4,24 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GoogleCalendarService
 {
-    public class MeetingBooking
+    public class BookingService
     {
         private CalendarService _service;
         private ILog _log;
 
-        public MeetingBooking(CalendarService service, ILog log)
+        public BookingService(CalendarService service, ILog log)
         {
             _service = service;
             _log = log;
         }
 
+        public BookingService(CalendarService service)
+        {
+            _service = service;
+        }
         public Event UpdateEvent(Event eventForUpdate, string calendarId, string eventId)
         {
             try
@@ -28,8 +30,8 @@ namespace GoogleCalendarService
             }
             catch (Exception e)
             {
-                _log.Error("Exception - \n"+e);
-                throw e;
+                _log?.Error("Exception - \n" + e);
+                throw;
             }
         }
 
@@ -41,8 +43,8 @@ namespace GoogleCalendarService
             }
             catch (Exception e)
             {
-                _log.Error("Exception - \n" + e);
-                throw e;
+                _log?.Error("Exception - \n" + e);
+                throw;
             }
         }
 
@@ -54,8 +56,8 @@ namespace GoogleCalendarService
             }
             catch (Exception e)
             {
-                _log.Error("Exception - \n" + e);
-                throw e;
+                _log?.Error("Exception - \n" + e);
+                throw;
             }
         }
 
@@ -67,8 +69,8 @@ namespace GoogleCalendarService
             }
             catch (Exception e)
             {
-                _log.Error("Exception - \n" + e);
-                throw e;
+                _log?.Error("Exception - \n" + e);
+                throw;
             }
         }
 
@@ -80,8 +82,8 @@ namespace GoogleCalendarService
             }
             catch (Exception e)
             {
-                _log.Error("Exception - \n" + e);
-                throw e;
+                _log?.Error("Exception - \n" + e);
+                throw;
             }
         }
     }

@@ -1,13 +1,12 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Practices.Unity;
-using Microsoft.Practices.Unity.Configuration;
-using BookingRoom.Models;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
 using log4net;
 using GoogleCalendarService.GoogleConnection;
 using GoogleCalendarService;
+using BookingRoom.Helpers;
 
 namespace BookingRoom.App_Start
 {
@@ -41,20 +40,17 @@ namespace BookingRoom.App_Start
         {
             // NOTE: To load from web.config uncomment the line below. Make sure to add a Microsoft.Practices.Unity.Configuration to the using statements.
             // container.LoadConfiguration();
-
-            // TODO: Register your types here
-            // container.RegisterType<IProductRepository, ProductRepository>();
             container.RegisterType<ILog>(
-            new InjectionFactory(x => LogManager.GetLogger(System.Configuration.ConfigurationManager.AppSettings["LoggerName"])));
+            new InjectionFactory(x => LogManager.GetLogger(AppSettingsHelper.GetAppSetting(AppSetingsConst.LoggerName))));
 
             container.RegisterType<X509Certificate2>(new InjectionConstructor(
-                System.Web.Hosting.HostingEnvironment.MapPath(System.Configuration.ConfigurationManager.AppSettings["MapPath"]),
-                System.Configuration.ConfigurationManager.AppSettings["password"],
+                System.Web.Hosting.HostingEnvironment.MapPath(AppSettingsHelper.GetAppSetting(AppSetingsConst.MapPath)),
+                AppSettingsHelper.GetAppSetting(AppSetingsConst.Password),
                 X509KeyStorageFlags.Exportable
                 ));
 
             container.RegisterType<CustomCredentialInitializer>(new InjectionConstructor(
-                System.Configuration.ConfigurationManager.AppSettings["emailService"],
+                AppSettingsHelper.GetAppSetting(AppSetingsConst.EmailService),
                 new[] { CalendarService.Scope.Calendar },
                 container.Resolve<X509Certificate2>()
                 ));
@@ -64,11 +60,11 @@ namespace BookingRoom.App_Start
 
             container.RegisterType<CustomInitializer>(
                 new InjectionConstructor(container.Resolve<ServiceAccountCredential>(),
-                System.Configuration.ConfigurationManager.AppSettings["applicationName"]));
+                AppSettingsHelper.GetAppSetting(AppSetingsConst.ApplicationName)));
 
             container.RegisterType<CalendarService>(new InjectionConstructor(container.Resolve<CustomInitializer>()));
 
-            container.RegisterType<MeetingBooking>(new InjectionConstructor(container.Resolve<CalendarService>(),container.Resolve<ILog>()));
+            container.RegisterType<BookingService>(new InjectionConstructor(container.Resolve<CalendarService>()));
         }
     }
 }

@@ -7,8 +7,8 @@
     <ProjectGuid>{5F32343A-14CE-401A-8177-9EE14E3878BA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CalendarGoogleService</RootNamespace>
-    <AssemblyName>CalendarGoogleService</AssemblyName>
+    <RootNamespace>GoogleCalendarService</RootNamespace>
+    <AssemblyName>GoogleCalendarService</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -101,9 +101,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GoogleConnection\CustomCredentialInitializer.cs" />
-    <Compile Include="GoogleConnection\CustomInitializer.cs" />
-    <Compile Include="MeetingBooking.cs" />
+    <Compile Include="Initializers\CustomCredentialInitializer.cs" />
+    <Compile Include="Initializers\CustomInitializer.cs" />
+    <Compile Include="BookingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
