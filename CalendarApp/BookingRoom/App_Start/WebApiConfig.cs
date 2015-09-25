@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using BookingRoom.Filters;
 
 namespace BookingRoom
 {
@@ -13,6 +14,8 @@ namespace BookingRoom
 
             // Web API routes
             config.MapHttpAttributeRoutes();
+
+            config.Filters.Add(new GoogleExceptionFilterAttribute());
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
