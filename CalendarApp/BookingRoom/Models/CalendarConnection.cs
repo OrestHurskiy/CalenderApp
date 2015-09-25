@@ -15,7 +15,6 @@ namespace BookingRoom.Models
     /// </summary>
     public class CalendarConnection
     {
-        private string serviceEmail;
         private X509Certificate2 certificate;
         private ServiceAccountCredential credential;
         private BaseClientService.Initializer initializer;
@@ -23,9 +22,8 @@ namespace BookingRoom.Models
         /// <summary>
         /// Constructor for connecting to Gmail Account
         /// </summary>
-        public CalendarConnection()
+        public CalendarConnection(string serviceEmail)
         {
-            serviceEmail = "1022042832033-glqi5vrlgh0gtpcdg620nkrg4hs65835@developer.gserviceaccount.com";
             var mappedPath = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/Token.p12");
             certificate = new X509Certificate2(mappedPath, "notasecret", X509KeyStorageFlags.Exportable);
 

@@ -13,5 +13,9 @@ namespace BookingRoom.Models.Posting
         public int Hour { get; set; }
         public int Minute { get; set; }
         public int Second { get; set; }
+        public DateTime ToDateTime()
+        {
+            return new DateTime(Year,Mounth,Day,Hour,Minute,Second);
+        }
     }
 }

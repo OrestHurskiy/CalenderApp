@@ -15,7 +15,7 @@ namespace BookingRoom.Controllers
 
         public DisplayController()
         {
-            _connection = new CalendarConnection();
+            _connection = new CalendarConnection("1022042832033-glqi5vrlgh0gtpcdg620nkrg4hs65835@developer.gserviceaccount.com");
         }
 
         [HttpGet]
