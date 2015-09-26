@@ -5,15 +5,16 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using BookingRoom.Models;
+using BookingRoom.Models.GoogleConnection;
 
 namespace BookingRoom.Controllers
 {
-    public class DeleteController : ApiController
+    public class DeleteController : EventController
     {
-        private readonly CalendarConnection _connection;
-        public DeleteController()
+        public DeleteController(ICalendarConnection connection)
+            :base(connection)
         {
-            _connection = new CalendarConnection("1022042832033-glqi5vrlgh0gtpcdg620nkrg4hs65835@developer.gserviceaccount.com");
+
         }
         [HttpDelete]
         public HttpResponseMessage DeleteEvent(string calendarId, string eventId)

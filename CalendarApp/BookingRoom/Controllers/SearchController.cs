@@ -6,16 +6,16 @@ using System.Net.Http;
 using System.Web.Http;
 using BookingRoom.Models;
 using BookingRoom.Models.Displaying;
+using BookingRoom.Models.GoogleConnection;
 
 namespace BookingRoom.Controllers
 {
-    public class SearchController : ApiController
+    public class SearchController : EventController
     {
-        private readonly CalendarConnection _connection;
-
-        public SearchController()
+        public SearchController(ICalendarConnection connection)
+            :base(connection)
         {
-            _connection = new CalendarConnection("1022042832033-glqi5vrlgh0gtpcdg620nkrg4hs65835@developer.gserviceaccount.com");
+
         }
 
         [HttpGet]

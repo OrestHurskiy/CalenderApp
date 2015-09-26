@@ -1,4 +1,4 @@
-﻿using BookingRoom.Models.Posting;
+﻿using BookingRoom.Models.GoogleCalendar;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,4 +1,5 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using BookingRoom.Models.GoogleConnection;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
 using Google.Apis.Services;
 using System;
@@ -13,7 +14,7 @@ namespace BookingRoom.Models
     /// <summary>
     /// Class for creating Google Caledar Service
     /// </summary>
-    public class CalendarConnection
+    public class CalendarConnection : ICalendarConnection
     {
         private X509Certificate2 certificate;
         private ServiceAccountCredential credential;
@@ -22,17 +23,17 @@ namespace BookingRoom.Models
         /// <summary>
         /// Constructor for connecting to Gmail Account
         /// </summary>
-        public CalendarConnection(string serviceEmail)
+        public CalendarConnection(string serviceEmail,string password,string applicationName)
         {
             var mappedPath = System.Web.Hosting.HostingEnvironment.MapPath("~/App_Data/Token.p12");
-            certificate = new X509Certificate2(mappedPath, "notasecret", X509KeyStorageFlags.Exportable);
+            certificate = new X509Certificate2(mappedPath, password, X509KeyStorageFlags.Exportable);
 
             credential = new ServiceAccountCredential(new ServiceAccountCredential.Initializer(serviceEmail)
             { Scopes = new[] { CalendarService.Scope.Calendar } }.FromCertificate(certificate));
 
             initializer = new BaseClientService.Initializer();
             initializer.HttpClientInitializer = credential;
-            initializer.ApplicationName = "CalendarApp";
+            initializer.ApplicationName = applicationName;
             service = new CalendarService(initializer);
         }
         /// <summary>

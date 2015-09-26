@@ -1,9 +1,10 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace BookingRoom.Models.Posting
+namespace BookingRoom.Models.GoogleEvent
 {
     public class EventTime
     {
@@ -15,7 +16,7 @@ namespace BookingRoom.Models.Posting
         public int Second { get; set; }
         public DateTime ToDateTime()
         {
-            return new DateTime(Year,Mounth,Day,Hour,Minute,Second);
+            return new DateTime(Year, Mounth, Day, Hour, Minute, Second);
         }
     }
 }
