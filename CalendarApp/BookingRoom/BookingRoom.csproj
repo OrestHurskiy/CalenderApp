@@ -157,6 +157,7 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Log4netConfig.xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\UnityConfig.cs" />
@@ -171,9 +172,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\GoogleConnection\CalendarConnection.cs" />
-    <Compile Include="Models\Displaying\EventDto.cs" />
-    <Compile Include="Models\GoogleConnection\ICalendarConnection.cs" />
+    <Compile Include="Models\GoogleConnection\GoogleCalendarService.cs" />
+    <Compile Include="Models\GoogleConnection\ClientInitializer.cs" />
+    <Compile Include="Models\GoogleConnection\IGoogleCalendarService.cs" />
+    <Compile Include="Models\GoogleConnection\ServiceCredential.cs" />
+    <Compile Include="Models\GoogleConnection\TokenManager.cs" />
     <Compile Include="Models\GoogleEvent\CalendarEvent.cs" />
     <Compile Include="Models\GoogleEvent\EventTime.cs" />
     <Compile Include="Models\GoogleEvent\ToEventConverter.cs" />

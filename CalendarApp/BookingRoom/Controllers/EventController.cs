@@ -1,4 +1,5 @@
 ﻿using BookingRoom.Models.GoogleConnection;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +11,12 @@ namespace BookingRoom.Controllers
 {
     public class EventController : ApiController
     {
-        protected readonly ICalendarConnection _connection;
-        public EventController(ICalendarConnection connection)
+        protected readonly IGoogleCalendarService _connection;
+        protected readonly ILog log;
+        public EventController(IGoogleCalendarService connection,ILog logger)
         {
             _connection = connection;
+            log = logger;
         }
     }
 }

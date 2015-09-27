@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookingRoom.Models.GoogleConnection
 {
-    public interface ICalendarConnection
+    public interface IGoogleCalendarService
     {
         CalendarService GoogleCalendar { get; }
     }

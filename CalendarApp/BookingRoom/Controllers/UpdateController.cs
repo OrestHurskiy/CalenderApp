@@ -10,13 +10,14 @@ using System.Net.Http;
 using System.Web.Http;
 using BookingRoom.Models.GoogleConnection;
 using BookingRoom.Models.GoogleEvent;
+using log4net;
 
 namespace BookingRoom.Controllers
 {
     public class UpdateController : EventController
     {
-        public UpdateController(ICalendarConnection connection)
-            : base(connection)
+        public UpdateController(IGoogleCalendarService connection,ILog logger)
+            : base(connection,logger)
         {
 
         }
@@ -30,6 +31,7 @@ namespace BookingRoom.Controllers
             }
             catch(Exception e)
             {
+                log.Error("Exception -\n" + e);
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
             }                          
             return Request.CreateResponse(HttpStatusCode.OK,eventForUpdate);          

@@ -14,20 +14,6 @@ namespace BookingRoom.Models.GoogleCalendar
         public string Summary { get; set; }
         public string Description { get; set; }
         public string CalendarID { get; set; }
-        /* public Event ToEvent()
-         {
-             Google.Apis.Calendar.v3.Data.Event toAddEvent = new Google.Apis.Calendar.v3.Data.Event();
-             toAddEvent.Summary = Summary;
-             toAddEvent.Description = Description;
-             toAddEvent.Start = new EventDateTime()
-             {
-                 DateTime = Start.ToDateTime()
-             };
-             toAddEvent.End = new EventDateTime()
-             {
-                 DateTime = End.ToDateTime()
-             };
-             return toAddEvent;
-         }*/
+        
     }
 }

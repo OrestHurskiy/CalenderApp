@@ -9,14 +9,15 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using BookingRoom.Models.GoogleEvent;
+using log4net;
 
 namespace BookingRoom.Controllers
 {
 
     public class PostController : EventController
     {
-        public PostController(ICalendarConnection connection)
-            :base(connection)
+        public PostController(IGoogleCalendarService connection,ILog logger)
+            :base(connection,logger)
         {
 
         }
@@ -30,6 +31,7 @@ namespace BookingRoom.Controllers
             }
             catch (Exception e)
             {
+                log.Error("Exception -\n" + e);
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
             }
 
