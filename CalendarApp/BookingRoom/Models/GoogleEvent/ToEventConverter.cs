@@ -9,10 +9,9 @@ namespace BookingRoom.Models.GoogleEvent
 {
     public static class ToEventConverter
     {
-        private static Event _newEvent;
         public static Event ToEvent(CalendarEvent eventForConverting)
         {
-            _newEvent = new Event();
+           Event _newEvent = new Event();
             _newEvent.Summary = eventForConverting.Summary;
             _newEvent.Description = eventForConverting.Description;
             _newEvent.Start = new EventDateTime()
@@ -23,6 +22,7 @@ namespace BookingRoom.Models.GoogleEvent
             {
                 DateTime = eventForConverting.End.ToDateTime()
             };
+
             return _newEvent;
         }
     }

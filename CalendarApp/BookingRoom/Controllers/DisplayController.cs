@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using BookingRoom.Models;
-using BookingRoom.Models.GoogleCalendar;
-using BookingRoom.Models.GoogleConnection;
 using Google.Apis.Calendar.v3.Data;
 using log4net;
+using GoogleCalendarService;
 
 namespace BookingRoom.Controllers
 {
     public class DisplayController : EventController
     {
-        public DisplayController(IGoogleCalendarService connection,ILog logger)
-            :base(connection,logger)
+        public DisplayController(MeetingBooking connection)
+            :base(connection)
         {
 
         }
@@ -26,11 +23,10 @@ namespace BookingRoom.Controllers
             IList<Event> events;
             try
             {
-                events = _connection.GoogleCalendar.Events.List(calendarId).Execute().Items;
+                events = _connection.GetEvents(calendarId);
             }
             catch (Exception e)
             {
-                log.Error("Exception -\n" + e);
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, e);
             }
 

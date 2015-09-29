@@ -1,22 +1,15 @@
-﻿using BookingRoom.Models.GoogleConnection;
-using log4net;
+﻿using log4net;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-
+using GoogleCalendarService;
 namespace BookingRoom.Controllers
 {
     public class EventController : ApiController
     {
-        protected readonly IGoogleCalendarService _connection;
-        protected readonly ILog log;
-        public EventController(IGoogleCalendarService connection,ILog logger)
+        protected MeetingBooking _connection;
+        public EventController(MeetingBooking connection)
         {
             _connection = connection;
-            log = logger;
         }
     }
 }

@@ -11,7 +11,7 @@
     <maxSizeRollBackups value="10"/>
     <maximumFileSize value="3MB"/>
     <layout type ="log4net.Layout.PatternLayout">
-      <param name ="ConversionPattern" value ="%newline *************%date%newline %logger - %message%newline*************%date%newline"/>
+      <param name ="ConversionPattern" value ="%n************-5p [%d]%n [%C.%M] [%l]%n%m%n************[%d]%n"/>
     </layout>
   </appender>
   <logger name ="ExceptionLogger">

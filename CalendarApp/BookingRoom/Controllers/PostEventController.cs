@@ -1,6 +1,5 @@
 ﻿using BookingRoom.Models;
 using BookingRoom.Models.GoogleCalendar;
-using Google.Apis.Requests;
 using Google.Apis.Calendar.v3.Data;
 using System;
 using System.Collections.Generic;
@@ -15,25 +14,27 @@ using GoogleCalendarService;
 
 namespace BookingRoom.Controllers
 {
-    public class UpdateController : EventController
+
+    public class PostEventController : EventController
     {
-        public UpdateController(MeetingBooking connection)
+        public PostEventController(MeetingBooking connection)
             : base(connection)
         {
 
         }
-        [HttpPut]
-        public HttpResponseMessage UpDateEvent(CalendarEvent eventForUpdate, string eventID)
+        [HttpPost]
+        public HttpResponseMessage EventPost(CalendarEvent eventPost)
         {
             try
             {
-                _connection.UpdateEvent(ToEventConverter.ToEvent(eventForUpdate), eventForUpdate.CalendarID, eventID);
+                _connection.PostEvent(ToEventConverter.ToEvent(eventPost), eventPost.CalendarID);
             }
             catch (Exception e)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
             }
-            return Request.CreateResponse(HttpStatusCode.Created, eventForUpdate);
+
+            return Request.CreateResponse(HttpStatusCode.Created, eventPost);
         }
     }
 }

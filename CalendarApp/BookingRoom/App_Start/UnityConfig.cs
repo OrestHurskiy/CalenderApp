@@ -1,9 +1,13 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
-using BookingRoom.Models.GoogleConnection;
 using BookingRoom.Models;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Calendar.v3;
 using log4net;
+using GoogleCalendarService.GoogleConnection;
+using GoogleCalendarService;
 
 namespace BookingRoom.App_Start
 {
@@ -40,26 +44,31 @@ namespace BookingRoom.App_Start
 
             // TODO: Register your types here
             // container.RegisterType<IProductRepository, ProductRepository>();
-            container.RegisterType<TokenManager>(new InjectionConstructor(
-               System.Configuration.ConfigurationManager.AppSettings["password"]
-               ));
+            container.RegisterType<ILog>(
+            new InjectionFactory(x => LogManager.GetLogger(System.Configuration.ConfigurationManager.AppSettings["LoggerName"])));
 
-            container.RegisterType<ServiceCredential>(new InjectionConstructor(
-                 System.Configuration.ConfigurationManager.AppSettings["emailService"],
-                 container.Resolve<TokenManager>()
+            container.RegisterType<X509Certificate2>(new InjectionConstructor(
+                System.Web.Hosting.HostingEnvironment.MapPath(System.Configuration.ConfigurationManager.AppSettings["MapPath"]),
+                System.Configuration.ConfigurationManager.AppSettings["password"],
+                X509KeyStorageFlags.Exportable
                 ));
 
-            container.RegisterType<ClientInitializer>();
+            container.RegisterType<CustomCredentialInitializer>(new InjectionConstructor(
+                System.Configuration.ConfigurationManager.AppSettings["emailService"],
+                new[] { CalendarService.Scope.Calendar },
+                container.Resolve<X509Certificate2>()
+                ));
 
-            container.RegisterType<IGoogleCalendarService, GoogleCalendarService>(new InjectionConstructor(
-                System.Configuration.ConfigurationManager.AppSettings["applicationName"],
-                container.Resolve<ServiceCredential>(),
-                container.Resolve<ClientInitializer>()
-                )
-                );
+            container.RegisterType<ServiceAccountCredential>(
+                new InjectionConstructor(container.Resolve<CustomCredentialInitializer>()));
 
-            container.RegisterType<ILog>(
-                new InjectionFactory(x =>LogManager.GetLogger(System.Configuration.ConfigurationManager.AppSettings["LoggerName"])));
+            container.RegisterType<CustomInitializer>(
+                new InjectionConstructor(container.Resolve<ServiceAccountCredential>(),
+                System.Configuration.ConfigurationManager.AppSettings["applicationName"]));
+
+            container.RegisterType<CalendarService>(new InjectionConstructor(container.Resolve<CustomInitializer>()));
+
+            container.RegisterType<MeetingBooking>(new InjectionConstructor(container.Resolve<CalendarService>(),container.Resolve<ILog>()));
         }
     }
 }

@@ -166,17 +166,12 @@
     <Compile Include="Controllers\DeleteController.cs" />
     <Compile Include="Controllers\DisplayController.cs" />
     <Compile Include="Controllers\EventController.cs" />
-    <Compile Include="Controllers\PostController.cs" />
+    <Compile Include="Controllers\PostEventController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UpdateController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\GoogleConnection\GoogleCalendarService.cs" />
-    <Compile Include="Models\GoogleConnection\ClientInitializer.cs" />
-    <Compile Include="Models\GoogleConnection\IGoogleCalendarService.cs" />
-    <Compile Include="Models\GoogleConnection\ServiceCredential.cs" />
-    <Compile Include="Models\GoogleConnection\TokenManager.cs" />
     <Compile Include="Models\GoogleEvent\CalendarEvent.cs" />
     <Compile Include="Models\GoogleEvent\EventTime.cs" />
     <Compile Include="Models\GoogleEvent\ToEventConverter.cs" />
@@ -195,6 +190,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GoogleCalendarService\GoogleCalendarService.csproj">
+      <Project>{5f32343a-14ce-401a-8177-9ee14e3878ba}</Project>
+      <Name>GoogleCalendarService</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
