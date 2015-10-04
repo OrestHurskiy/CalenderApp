@@ -20,31 +20,24 @@ namespace NUnitTestProject
         public void CheckingUpdating()
         {
             CalendarService googleService = _serviceLocator.Get<CalendarService>();
+
             string testCalendarId = System.Configuration.ConfigurationManager.AppSettings["TestCalendar"];
             IList<Event> beforeUpdateEventList = googleService.Events.List(testCalendarId).Execute().Items;
-
-            Event testedEvent = (from gEvent in beforeUpdateEventList
-                                 where gEvent.Id != null //couse we can post Event without id,for the present;
-                                 select gEvent).First();
-
-            if (testedEvent == null)
-                throw new Exception("Cant find event for update"); //we need to know that there are no event for updating;
+            if (beforeUpdateEventList == null)
+                throw new Exception("Event list are empty!");
+            Event testedEvent = beforeUpdateEventList[0];
 
             string currentSummary = testedEvent.Summary; //remember current state
             string currentDesctiption = testedEvent.Description;
-
             testedEvent.Summary = "ChangedSummary"; //chenage event
             testedEvent.Description = "ChengedDescription";
-
 
             _meetingBooking.UpdateEvent(testedEvent,testCalendarId,testedEvent.Id);
 
             IList<Event> ufterApdateList = googleService.Events.List(testCalendarId).Execute().Items;
-
             Event testedAfterUpdateEvent = (from gEvent in ufterApdateList
                                             where gEvent.Id == testedEvent.Id
                                             select gEvent).First();
-
             if (testedAfterUpdateEvent == null)
                 throw new Exception("Cant Find updated Event");
 
@@ -56,12 +49,14 @@ namespace NUnitTestProject
 
             _meetingBooking.UpdateEvent(testedAfterUpdateEvent, testCalendarId, testedAfterUpdateEvent.Id);
 
-            Event checkEvent = (from gEvent in beforeUpdateEventList
+            Event checkBackEvent = (from gEvent in beforeUpdateEventList
                                 where gEvent.Id == testedEvent.Id
                                 select gEvent).Single();
+            if (checkBackEvent == null)
+                throw new Exception("Cant Find updated Event");
 
-            Assert.AreEqual(checkEvent.Summary,testedEvent.Summary);
-            Assert.AreEqual(checkEvent.Description, testedEvent.Description);
+            Assert.AreEqual(checkBackEvent.Summary,testedEvent.Summary);
+            Assert.AreEqual(checkBackEvent.Description, testedEvent.Description);
         }
 
         [Test]
@@ -72,11 +67,10 @@ namespace NUnitTestProject
             string testCalendarId = System.Configuration.ConfigurationManager.AppSettings["TestCalendar"];
 
             IList<Event> beforeUpdateEventList = googleService.Events.List(testCalendarId).Execute().Items;
-
-            Event testedEvent = (from gEvent in beforeUpdateEventList
-                                 where gEvent.Id != null //couse we can post Event without id,for the present;
-                                 select gEvent).First();
-
+            if (beforeUpdateEventList == null)
+                throw new Exception("Empty event list");
+            Event testedEvent = beforeUpdateEventList[0];//take any event
+            
             Assert.Throws(typeof(Google.GoogleApiException),
                 delegate { _meetingBooking.UpdateEvent(testedEvent, string.Empty, testedEvent.Id); });
             Assert.Throws(typeof(Google.GoogleApiException),
