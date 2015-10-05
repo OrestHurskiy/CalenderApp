@@ -139,10 +139,13 @@
     <Compile Include="Common\DependencyInjectionServiceLocator.cs" />
     <Compile Include="Common\IContainerRegistrationModule.cs" />
     <Compile Include="Common\IServiceLocator.cs" />
+    <Compile Include="DeleteEventTest.cs" />
     <Compile Include="Dependency\UnityConfig.cs" />
     <Compile Include="Dependency\UnityRegistrationModule.cs" />
+    <Compile Include="DisplayEventTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PostEventTest.cs" />
+    <Compile Include="SearchEventTest.cs" />
     <Compile Include="UpdateEventTest.cs" />
   </ItemGroup>
   <ItemGroup>
