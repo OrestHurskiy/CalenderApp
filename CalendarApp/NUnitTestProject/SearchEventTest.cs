@@ -28,13 +28,12 @@ namespace NUnitTestProject
                "Nunit", "NunitDecription");
 
             _testEvent = ToEventConverter.ToEvent(eventForAdd);
-            _testEvent.Id = "abdd3960anfn5cmi4q9325usco";
             _googleService.Events.Insert(_testEvent, _testCalendarId).Execute();
         }
 
         private void Dispose()
         {
-            _googleService.Events.Delete(_testCalendarId, _testEvent.Id);
+            _googleService.Events.Delete(_testCalendarId, _testEvent.Id).Execute();
             _googleService.Dispose();
         }
 
@@ -52,6 +51,7 @@ namespace NUnitTestProject
         public void Check_Searching_Event()
         {
             Init();
+            _testEvent = _googleService.Events.List(_testCalendarId).Execute().Items.Last();
             var searchedEvent = _meetingBooking.SearchEventById(_testCalendarId, _testEvent.Id);
             Assert.IsNotNull(searchedEvent);
             Assert.AreEqual(searchedEvent.Id, _testEvent.Id);

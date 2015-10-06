@@ -30,7 +30,6 @@ namespace NUnitTestProject
                "Nunit", "NunitDecription");
 
             _testEvent = ToEventConverter.ToEvent(eventForAdd);
-            _testEvent.Id = "abqq3960anfn5cmi4q9325usco";
             _googleService.Events.Insert(_testEvent, _testCalendarId).Execute();
         }
 
@@ -53,7 +52,7 @@ namespace NUnitTestProject
         public void Checking_Deleting_Event()
         {
             Init();
-
+            _testEvent = _googleService.Events.List(_testCalendarId).Execute().Items.Last();
             _meetingBooking.DeleteEvent(_testCalendarId, _testEvent.Id);
 
             var deletedEvent =
@@ -62,7 +61,6 @@ namespace NUnitTestProject
                     .Items.SingleOrDefault(ev => ev.Id == _testEvent.Id);
 
             Assert.IsNull(deletedEvent);
-
             Dispose();
         }
     }
