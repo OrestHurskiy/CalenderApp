@@ -14,14 +14,14 @@ namespace NUnitTestProject
     {
         protected IServiceLocator _serviceLocator;
         protected IUnityContainer _unityContainer;
-        protected MeetingBooking _meetingBooking;
+        protected BookingService _meetingBooking;
 
         [TestFixtureSetUp]
         public void Initialize()
         {           
             _unityContainer = Dependency.UnityConfig.GetUnityContainer();
             _serviceLocator = _unityContainer.Resolve<IServiceLocator>();
-            _meetingBooking = _serviceLocator.Get<MeetingBooking>();
+            _meetingBooking = _serviceLocator.Get<BookingService>();
         }
         protected CalendarEvent CreateEvent(EventTime start,EventTime end,string summary,string desctiption)
         {
