@@ -13,4 +13,14 @@ namespace BookingRoom.Helpers
             ConfigurationManager.AppSettings.Add(appSettingKey.ToString(), value);
         }
     }
+
+    public enum AppSetingsConst
+    {
+            EmailService,
+            Password,
+            ApplicationName,
+            LoggerName,
+            MapPath,
+            TestCalendar
+    };
 }
