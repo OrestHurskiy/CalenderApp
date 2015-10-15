@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Google.Apis.Calendar.v3.Data;
 using System.Linq;
 using BookingRoom.Helpers;
@@ -14,20 +15,20 @@ namespace NUnitTestProject
         {
             var calendarId = AppSettingsHelper.GetAppSetting(AppSetingsConst.TestCalendar);
 
-            var eventForAdd = _eventFactory.CreateEvent(
+            var eventToAdd = _eventFactory.CreateEvent(
                new EventTime(2015, 10, 6, 15, 20, 0), new EventTime(2015, 10, 6, 16, 20, 0),
                "Nunit", "NunitDecription");
 
-            var testEvent = ToEventConverter.ToEvent(eventForAdd);
+            var testEvent = ToEventConverter.ToEvent(eventToAdd, _timezone);
             Assert.DoesNotThrow(() => _calendarService.Events.Insert(testEvent, calendarId).Execute());
 
-            testEvent = _calendarService.Events.List(calendarId).Execute().Items.Last();
+            testEvent = _bookingService.GetEvents(calendarId).Last();
             testEvent.Description = $"Changed{testEvent.Description}";
             testEvent.Summary = $"Changed{testEvent.Summary}";
 
-            _meetingBooking.UpdateEvent(testEvent, calendarId, testEvent.Id);
+            _bookingService.UpdateEvent(testEvent, calendarId, testEvent.Id);
 
-            var updatedEvent = _calendarService.Events.List(calendarId).Execute().Items.Last();
+            var updatedEvent = _bookingService.GetEvents(calendarId).Last();
             Assert.AreEqual(updatedEvent.Description, testEvent.Description);
             Assert.AreEqual(updatedEvent.Summary, testEvent.Summary);
             Assert.DoesNotThrow(() => _calendarService.Events.Delete(calendarId, updatedEvent.Id).Execute());
@@ -37,13 +38,16 @@ namespace NUnitTestProject
         public void UpdateEvent_WithWrongCalendarId_ThrowsException()
         {
             var calendarId = AppSettingsHelper.GetAppSetting(AppSetingsConst.TestCalendar);
+            var someEvent = _eventFactory.CreateEvent(
+               new EventTime(2015, 10, 17, 10, 0, 0), new EventTime(2015, 10, 17, 12, 0, 0),
+               "Nunit", "NunitDecription");
+            _bookingService.PostEvent(ToEventConverter.ToEvent(someEvent, _timezone), calendarId);
+            var beforeUpdateEventList = _bookingService.GetEvents(calendarId);
 
-            var beforeUpdateEventList = _calendarService.Events.List(calendarId).Execute().Items;
-            
             var testEvent = beforeUpdateEventList[0];//take any event
 
             Assert.Throws<Google.GoogleApiException>(
-                () => { _meetingBooking.UpdateEvent(testEvent, string.Empty, testEvent.Id); });
+                () => { _bookingService.UpdateEvent(testEvent, string.Empty, testEvent.Id); });
         }
 
         [Test]
@@ -51,12 +55,17 @@ namespace NUnitTestProject
         {
             var calendarId = AppSettingsHelper.GetAppSetting(AppSetingsConst.TestCalendar);
 
-            var beforeUpdateEventList = _calendarService.Events.List(calendarId).Execute().Items;
-           
+            var someEvent = _eventFactory.CreateEvent(
+               new EventTime(2015, 10, 17, 10, 0, 0), new EventTime(2015, 10, 17, 12, 0, 0),
+               "Nunit", "NunitDecription");
+            _bookingService.PostEvent(ToEventConverter.ToEvent(someEvent, _timezone), calendarId);
+            var beforeUpdateEventList = _bookingService.GetEvents(calendarId);
+
             var testEvent = beforeUpdateEventList[0];//take any event
 
             Assert.Throws<Google.GoogleApiException>(
-                () => { _meetingBooking.UpdateEvent(testEvent, calendarId, string.Empty); });
+                () => { _bookingService.UpdateEvent(testEvent, calendarId, string.Empty); });
+
         }
 
         [Test]
@@ -67,8 +76,7 @@ namespace NUnitTestProject
             var eventId = "svvhrie7p05vrt5vi4f8j4ivlg";
 
             Assert.Throws<Google.GoogleApiException>(
-                () => { _meetingBooking.UpdateEvent(testEvent, calendarId, eventId); });
+                () => { _bookingService.UpdateEvent(testEvent, calendarId, eventId); });
         }
-
     }
 }

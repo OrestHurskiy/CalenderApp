@@ -4,17 +4,17 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GoogleCalendarService.Helpers;
 
 namespace GoogleCalendarService
 {
-    public class BookingService
+    public class BookingService : IBookingService
     {
-        private CalendarService _service;
-        private ILog _log;
+        private readonly CalendarService _service;
+        private readonly ILog _log;
 
-        public BookingService(CalendarService service, ILog log)
+        public BookingService(CalendarService service, ILog log) : this(service)
         {
-            _service = service;
             _log = log;
         }
 
@@ -22,11 +22,11 @@ namespace GoogleCalendarService
         {
             _service = service;
         }
-        public Event UpdateEvent(Event eventForUpdate, string calendarId, string eventId)
+        public Event UpdateEvent(Event eventToUpdate, string calendarId, string eventId)
         {
             try
             {
-                return _service.Events.Update(eventForUpdate, calendarId, eventId).Execute();
+                return _service.Events.Update(eventToUpdate, calendarId, eventId).Execute();
             }
             catch (Exception e)
             {
@@ -35,11 +35,11 @@ namespace GoogleCalendarService
             }
         }
 
-        public Event PostEvent(Event eventForAdd, string calendarId)
+        public Event PostEvent(Event eventToAdd, string calendarId)
         {
             try
-            {
-                return _service.Events.Insert(eventForAdd, calendarId).Execute();
+            {             
+               return _service.Events.Insert(eventToAdd, calendarId).Execute();
             }
             catch (Exception e)
             {
@@ -48,11 +48,28 @@ namespace GoogleCalendarService
             }
         }
 
-        public IList<Event> GetEvents(string calendarId)
+        public List<Event> GetEvents(string calendarId)
         {
+            int maxResults = Convert.ToInt32(AppSettingsHelper.GetAppSetting(AppSetingsConst.MaxResults));
+
             try
             {
-                return _service.Events.List(calendarId).Execute().Items;
+                EventsResource.ListRequest setUpRequset = _service.Events.List(calendarId);
+                setUpRequset.MaxResults = maxResults;
+                Events request = setUpRequset.Execute();
+                string token = request.NextPageToken;
+                List<Event> eventList = request.Items.ToList();
+                while (token != null)
+                {
+                    var tempRequst = _service.Events.List(calendarId);
+                    tempRequst.MaxResults = maxResults;
+                    tempRequst.PageToken = token;
+                    eventList = eventList.Concat(tempRequst.Execute().Items).ToList();
+                    var updatedRequest = tempRequst.Execute();
+                    token = updatedRequest.NextPageToken;
+                }
+
+                return eventList;
             }
             catch (Exception e)
             {
@@ -78,13 +95,19 @@ namespace GoogleCalendarService
         {
             try
             {
-                return _service.Events.List(calendarId).Execute().Items.SingleOrDefault(ev => ev.Id == eventId);
+                return _service.Events.Get(calendarId, eventId).Execute();
             }
             catch (Exception e)
             {
                 _log?.Error("Exception - \n" + e);
                 throw;
             }
+        }
+
+        public string GetCalendarTimeZone(string calendarId)
+        {
+            var calendars = _service.CalendarList.List().Execute();
+            return calendars.Items.First(cl => cl.Id == calendarId).TimeZone;
         }
     }
 }

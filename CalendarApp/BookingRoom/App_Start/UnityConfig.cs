@@ -7,6 +7,7 @@ using log4net;
 using GoogleCalendarService.GoogleConnection;
 using GoogleCalendarService;
 using BookingRoom.Helpers;
+using GoogleCalendarService.Manager;
 
 namespace BookingRoom.App_Start
 {
@@ -65,6 +66,11 @@ namespace BookingRoom.App_Start
             container.RegisterType<CalendarService>(new InjectionConstructor(container.Resolve<CustomInitializer>()));
 
             container.RegisterType<BookingService>(new InjectionConstructor(container.Resolve<CalendarService>()));
+            container.RegisterType<IBookingService, BookingService>();
+
+            container.RegisterType<EventManager>(new InjectionConstructor(container.Resolve<IBookingService>()));
+            container.RegisterType<IEventManager,EventManager>();
         }
+
     }
 }

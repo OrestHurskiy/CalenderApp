@@ -9,6 +9,7 @@ namespace BookingRoom.Models.GoogleCalendar
         public string Summary { get; set; }
         public string Description { get; set; }
         public string CalendarID { get; set; }
-        
+        public bool ForcedEvent { get; set; }
+        public  string[] Recurrence { get; set; }
     }
 }

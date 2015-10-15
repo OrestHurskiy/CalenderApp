@@ -14,7 +14,7 @@ namespace NUnitTestProject
             var calendarId = string.Empty;//error
 
             Assert.Throws<Google.GoogleApiException>(
-                 () => { _meetingBooking.GetEvents(calendarId); });
+                 () => { _bookingService.GetEvents(calendarId); });
         }
 
 
@@ -24,7 +24,7 @@ namespace NUnitTestProject
             var calendarId = AppSettingsHelper.GetAppSetting(AppSetingsConst.TestCalendar);
 
             var actualEvents = _calendarService.Events.List(calendarId).Execute().Items;
-            var expectedEvents = _meetingBooking.GetEvents(calendarId);
+            var expectedEvents = _bookingService.GetEvents(calendarId);
 
             CollectionAssert.AllItemsAreNotNull(expectedEvents);
             CollectionAssert.AllItemsAreInstancesOfType(expectedEvents, typeof(Event));

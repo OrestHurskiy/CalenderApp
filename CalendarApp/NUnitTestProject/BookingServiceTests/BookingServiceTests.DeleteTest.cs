@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using BookingRoom.Models.GoogleEvent;
 using Google.Apis.Calendar.v3;
-using NUnit.Core;
 using NUnit.Framework;
 using BookingRoom.Helpers;
 using Microsoft.Practices.Unity;
 using GoogleCalendarService;
 using BookingRoom.Models;
+using GoogleCalendarService.Manager;
 
 namespace NUnitTestProject
 {
@@ -14,18 +14,43 @@ namespace NUnitTestProject
     public partial class BookingServiceTests
     {
         private CalendarService _calendarService;
-        private BookingService _meetingBooking;
+        private IBookingService _bookingService;
         private EventFactory _eventFactory;
+        private string _timezone;
 
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
             var _unityContainer = Dependency.UnityConfig.GetUnityContainer();
+
             _calendarService = _unityContainer.Resolve<CalendarService>();
-            _meetingBooking = _unityContainer.Resolve<BookingService>();
+            _bookingService = _unityContainer.Resolve<IBookingService>();
             _eventFactory = _unityContainer.Resolve<EventFactory>();
+
+            var calendars = _calendarService.CalendarList.List().Execute();
+            _timezone = calendars.Items[0].TimeZone;
+        }
+        [SetUp]
+        public void SetUp()
+        {
+            var calendarId = AppSettingsHelper.GetAppSetting(AppSetingsConst.TestCalendar);
+
+            var conflictedEvent = _eventFactory.CreateEvent(
+                new EventTime(2014, 6, 17, 10, 0, 0), new EventTime(2014, 6, 17, 12, 0, 0),
+                "Nunit", "NunitDecription");
+            _bookingService.PostEvent(ToEventConverter.ToEvent(conflictedEvent, _timezone), calendarId);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            var calendarId = AppSettingsHelper.GetAppSetting(AppSetingsConst.TestCalendar);
+            var eventList = _bookingService.GetEvents(calendarId);
+            foreach (var e in eventList)
+            {
+                _calendarService.Events.Delete(calendarId, e.Id).Execute();
+            }
+        }
         [Test]
         public void DeleteEvent_WithWrongCalendarId_ThrowsException()
         {
@@ -33,7 +58,7 @@ namespace NUnitTestProject
             var calendarId = string.Empty;//error
 
             Assert.Throws<Google.GoogleApiException>(
-                () => { _meetingBooking.DeleteEvent(calendarId, eventId); });
+                () => { _bookingService.DeleteEvent(calendarId, eventId); });
         }
 
         [Test]
@@ -43,7 +68,7 @@ namespace NUnitTestProject
             var calendarId = AppSettingsHelper.GetAppSetting(AppSetingsConst.TestCalendar);
 
             Assert.Throws<Google.GoogleApiException>(
-                () => { _meetingBooking.DeleteEvent(calendarId, eventId); });
+                () => { _bookingService.DeleteEvent(calendarId, eventId); });
         }
 
         [Test]
@@ -51,15 +76,15 @@ namespace NUnitTestProject
         {
             var calendarId = AppSettingsHelper.GetAppSetting(AppSetingsConst.TestCalendar);
 
-            var eventForAdd = _eventFactory.CreateEvent(
+            var eventToAdd = _eventFactory.CreateEvent(
                new EventTime(2015, 10, 6, 15, 20, 0), new EventTime(2015, 10, 6, 16, 20, 0),
                "Nunit", "NunitDecription");
 
-            var testEvent = ToEventConverter.ToEvent(eventForAdd);
+            var testEvent = ToEventConverter.ToEvent(eventToAdd, _timezone);
             Assert.DoesNotThrow( () => _calendarService.Events.Insert(testEvent, calendarId).Execute());
                
-            testEvent = _calendarService.Events.List(calendarId).Execute().Items.Last();
-            _meetingBooking.DeleteEvent(calendarId, testEvent.Id);
+            testEvent = _bookingService.GetEvents(calendarId).Last();
+            _bookingService.DeleteEvent(calendarId, testEvent.Id);
 
             var deletedEvent =
                 _calendarService.Events.List(calendarId)
@@ -67,7 +92,6 @@ namespace NUnitTestProject
                     .Items.SingleOrDefault(ev => ev.Id == testEvent.Id);
 
             Assert.IsNull(deletedEvent);
-
         }
     }
 }

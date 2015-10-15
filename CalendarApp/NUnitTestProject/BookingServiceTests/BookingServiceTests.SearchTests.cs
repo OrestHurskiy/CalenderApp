@@ -10,7 +10,7 @@ namespace NUnitTestProject
     [TestFixture]
     public partial class BookingServiceTests 
     {
-
+        
         [Test]
         public void SearchEvent_WithWrongCalendarId_ThrowsException()
         {
@@ -18,16 +18,7 @@ namespace NUnitTestProject
             var calendarId = string.Empty;//error
 
             Assert.Throws<Google.GoogleApiException>(
-                () => { _meetingBooking.SearchEventById(calendarId, eventId); });
-        }
-
-        [Test]
-        public void SearchEvent_WithWrongEventId_ReturnsNull()
-        {
-            var eventId = string.Empty;//error
-            var calendarId = AppSettingsHelper.GetAppSetting(AppSetingsConst.TestCalendar);
-
-            Assert.IsNull(_meetingBooking.SearchEventById(calendarId, eventId));
+                () => { _bookingService.SearchEventById(calendarId, eventId); });
         }
 
         [Test]
@@ -35,15 +26,15 @@ namespace NUnitTestProject
         {
             var calendarId = AppSettingsHelper.GetAppSetting(AppSetingsConst.TestCalendar);
 
-            var eventForAdd = _eventFactory.CreateEvent(
+            var eventToAdd = _eventFactory.CreateEvent(
                new EventTime(2015, 10, 6, 15, 20, 0), new EventTime(2015, 10, 6, 16, 20, 0),
                "Nunit", "NunitDecription");
 
-            var testEvent = ToEventConverter.ToEvent(eventForAdd);
+            var testEvent = ToEventConverter.ToEvent(eventToAdd, _timezone);
             Assert.DoesNotThrow(() => _calendarService.Events.Insert(testEvent, calendarId).Execute());
 
-            testEvent = _calendarService.Events.List(calendarId).Execute().Items.Last();
-            var searchedEvent = _meetingBooking.SearchEventById(calendarId, testEvent.Id);
+            testEvent = _bookingService.GetEvents(calendarId).Last();
+            var searchedEvent = _bookingService.SearchEventById(calendarId, testEvent.Id);
             Assert.IsNotNull(searchedEvent);
             Assert.AreEqual(searchedEvent.Id, testEvent.Id);
             Assert.AreEqual(searchedEvent.Summary, testEvent.Summary);

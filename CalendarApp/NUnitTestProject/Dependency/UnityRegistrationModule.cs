@@ -9,6 +9,8 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
+using GoogleCalendarService.Manager;
+
 namespace NUnitTestProject.Dependency
 {
     public class UnityRegistrationModule
@@ -43,7 +45,11 @@ namespace NUnitTestProject.Dependency
 
             container.RegisterType<CalendarService>(new InjectionConstructor(container.Resolve<CustomInitializer>()));
 
-            container.RegisterType<BookingService>(new InjectionConstructor(container.Resolve<CalendarService>(), container.Resolve<ILog>()));
+            container.RegisterType<BookingService>(new InjectionConstructor(container.Resolve<CalendarService>(),container.Resolve<ILog>()));
+            container.RegisterType<IBookingService, BookingService>();
+
+            container.RegisterType<EventManager>(new InjectionConstructor(container.Resolve<BookingService>()));
+            container.RegisterType<IEventManager, EventManager>();
         }
     }
 }

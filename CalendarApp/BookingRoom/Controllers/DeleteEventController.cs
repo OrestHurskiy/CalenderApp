@@ -3,14 +3,16 @@ using System.Net.Http;
 using System.Web.Http;
 using GoogleCalendarService;
 using BookingRoom.Filters;
+using Google.Apis.Calendar.v3;
+using GoogleCalendarService.Manager;
 
 namespace BookingRoom.Controllers
 {
     [GoogleExceptionFilter]
     public class DeleteEventController : BaseEventController
     {
-        public DeleteEventController(BookingService bookingService)
-            :base(bookingService)
+        public DeleteEventController(IBookingService bookingService, IEventManager manager)
+            :base(bookingService, manager)
         {
 
         }
