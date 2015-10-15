@@ -173,8 +173,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\AppSetingsConst.cs" />
     <Compile Include="Helpers\AppSettingsHelper.cs" />
+    <Compile Include="Models\EventFactory.cs" />
     <Compile Include="Models\GoogleEvent\CalendarEvent.cs" />
     <Compile Include="Models\GoogleEvent\EventTime.cs" />
     <Compile Include="Models\GoogleEvent\ToEventConverter.cs" />
