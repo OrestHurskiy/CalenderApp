@@ -52,7 +52,10 @@ namespace GoogleCalendarService
         {
             try
             {
-                return _service.Events.List(calendarId).Execute().Items;
+                var request = _service.Events.List(calendarId);
+                request.SingleEvents = true;
+                request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+                return request.Execute().Items;
             }
             catch (Exception e)
             {
@@ -78,7 +81,7 @@ namespace GoogleCalendarService
         {
             try
             {
-                return _service.Events.List(calendarId).Execute().Items.SingleOrDefault(ev => ev.Id == eventId);
+                return _service.Events.Get(calendarId, eventId).Execute();
             }
             catch (Exception e)
             {

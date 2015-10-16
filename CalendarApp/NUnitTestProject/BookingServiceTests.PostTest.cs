@@ -8,7 +8,7 @@ using BookingRoom.Helpers;
 namespace NUnitTestProject
 {
     [TestFixture]
-    public partial class BookingServiceTests 
+    public partial class BookingServiceTests
     {
         [Test]
         public void PostEvent_WithWrongCalendarId_ThrowsException()
@@ -43,11 +43,13 @@ namespace NUnitTestProject
 
             _meetingBooking.PostEvent(ToEventConverter.ToEvent(eventForAdd), calendarId);
 
-            var testEvent = _calendarService.Events.List(calendarId).Execute().Items.Last();
-           
+            var request = _calendarService.Events.List(calendarId);
+            request.SingleEvents = true;
+            var testEvent = request.Execute().Items.Last();
+
             Assert.AreEqual(testEvent.Summary, eventForAdd.Summary);
             Assert.AreEqual(testEvent.Description, eventForAdd.Description);
-            Assert.DoesNotThrow( () => _calendarService.Events.Delete(calendarId, testEvent.Id).Execute());
+            Assert.DoesNotThrow(() => _calendarService.Events.Delete(calendarId, testEvent.Id).Execute());
         }
     }
 }
