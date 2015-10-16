@@ -8,7 +8,7 @@ using BookingRoom.Helpers;
 namespace NUnitTestProject
 {
     [TestFixture]
-    public partial class BookingServiceTests 
+    public partial class BookingServiceTests
     {
 
         [Test]
@@ -27,7 +27,8 @@ namespace NUnitTestProject
             var eventId = string.Empty;//error
             var calendarId = AppSettingsHelper.GetAppSetting(AppSetingsConst.TestCalendar);
 
-            Assert.IsNull(_meetingBooking.SearchEventById(calendarId, eventId));
+            Assert.Throws<Google.GoogleApiException>(
+                () => { _meetingBooking.SearchEventById(calendarId, eventId); });
         }
 
         [Test]
@@ -36,15 +37,17 @@ namespace NUnitTestProject
             var calendarId = AppSettingsHelper.GetAppSetting(AppSetingsConst.TestCalendar);
 
             var eventForAdd = _eventFactory.CreateEvent(
-               new EventTime(2015, 10, 6, 15, 20, 0), new EventTime(2015, 10, 6, 16, 20, 0),
+               new EventTime(2015, 10, 15, 15, 20, 0), new EventTime(2015, 10, 15, 16, 20, 0),
                "Nunit", "NunitDecription");
 
             var testEvent = ToEventConverter.ToEvent(eventForAdd);
             Assert.DoesNotThrow(() => _calendarService.Events.Insert(testEvent, calendarId).Execute());
 
-            testEvent = _calendarService.Events.List(calendarId).Execute().Items.Last();
+            var request = _calendarService.Events.List(calendarId);
+            request.SingleEvents = true;
+            testEvent = request.Execute().Items.Last();
+
             var searchedEvent = _meetingBooking.SearchEventById(calendarId, testEvent.Id);
-            Assert.IsNotNull(searchedEvent);
             Assert.AreEqual(searchedEvent.Id, testEvent.Id);
             Assert.AreEqual(searchedEvent.Summary, testEvent.Summary);
             Assert.AreEqual(searchedEvent.Description, testEvent.Description);

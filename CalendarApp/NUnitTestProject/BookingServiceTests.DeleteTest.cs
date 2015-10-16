@@ -56,15 +56,15 @@ namespace NUnitTestProject
                "Nunit", "NunitDecription");
 
             var testEvent = ToEventConverter.ToEvent(eventForAdd);
-            Assert.DoesNotThrow( () => _calendarService.Events.Insert(testEvent, calendarId).Execute());
-               
-            testEvent = _calendarService.Events.List(calendarId).Execute().Items.Last();
+            Assert.DoesNotThrow(() => _calendarService.Events.Insert(testEvent, calendarId).Execute());
+
+            var request = _calendarService.Events.List(calendarId);
+            request.SingleEvents = true;
+            testEvent = request.Execute().Items.Last();
+
             _meetingBooking.DeleteEvent(calendarId, testEvent.Id);
 
-            var deletedEvent =
-                _calendarService.Events.List(calendarId)
-                    .Execute()
-                    .Items.SingleOrDefault(ev => ev.Id == testEvent.Id);
+            var deletedEvent = request.Execute().Items.SingleOrDefault(ev => ev.Id == testEvent.Id);
 
             Assert.IsNull(deletedEvent);
 

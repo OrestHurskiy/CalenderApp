@@ -23,7 +23,11 @@ namespace NUnitTestProject
         {
             var calendarId = AppSettingsHelper.GetAppSetting(AppSetingsConst.TestCalendar);
 
-            var actualEvents = _calendarService.Events.List(calendarId).Execute().Items;
+            var request = _calendarService.Events.List(calendarId);
+            request.SingleEvents = true;
+            request.OrderBy = EventsResource.ListRequest.OrderByEnum.StartTime;
+
+            var actualEvents = request.Execute().Items;
             var expectedEvents = _meetingBooking.GetEvents(calendarId);
 
             CollectionAssert.AllItemsAreNotNull(expectedEvents);
