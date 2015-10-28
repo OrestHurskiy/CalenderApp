@@ -134,14 +134,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BookingServiceTests.DeleteTest.cs" />
+    <Compile Include="BookingServiceTests\BookingServiceTests.DeleteTest.cs" />
     <Compile Include="Dependency\UnityConfig.cs" />
     <Compile Include="Dependency\UnityRegistrationModule.cs" />
-    <Compile Include="BookingServiceTests.DisplayTest.cs" />
+    <Compile Include="BookingServiceTests\BookingServiceTests.DisplayTest.cs" />
+    <Compile Include="EventManagerTests\EventManager.MonthlyEventTest.cs" />
+    <Compile Include="EventManagerTests\EventManager.MultipleReccurentEventTest.cs" />
+    <Compile Include="EventManagerTests\EventManager.SingleEventTest.cs" />
+    <Compile Include="EventManagerTests\EventManager.SingleRecurrentEventTest.cs" />
+    <Compile Include="EventManagerTests\EventManager.UntilEventTest.cs" />
+    <Compile Include="EventManagerTests\EventManager.WeeklyEventTest.cs" />
+    <Compile Include="EventManagerTests\EventManager.YearlyEventTest.cs" />
+    <Compile Include="EventManagerTests\EventManagerTestClass.cs" />
+    <Compile Include="EventManagerTests\EventService.SelfIgnoringTest.cs" />
+    <Compile Include="ExtensionsTests\EventExtension.IntersectionTest.cs" />
+    <Compile Include="Helpers\RuleHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BookingServiceTests.PostTest.cs" />
-    <Compile Include="BookingServiceTests.SearchTests.cs" />
-    <Compile Include="BookingServiceTests.UpdateTest.cs" />
+    <Compile Include="BookingServiceTests\BookingServiceTests.PostTest.cs" />
+    <Compile Include="BookingServiceTests\BookingServiceTests.SearchTests.cs" />
+    <Compile Include="BookingServiceTests\BookingServiceTests.UpdateTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

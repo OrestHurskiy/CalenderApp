@@ -4,14 +4,16 @@ using System.Web.Http;
 using Google.Apis.Calendar.v3.Data;
 using GoogleCalendarService;
 using BookingRoom.Filters;
+using Google.Apis.Calendar.v3;
+using GoogleCalendarService.Manager;
 
 namespace BookingRoom.Controllers
 {
     [GoogleExceptionFilter]
     public class SearchEventController : BaseEventController
     {
-        public SearchEventController(BookingService bookingService)
-            :base(bookingService)
+        public SearchEventController(IBookingService bookingService, IEventManager manager)
+            :base(bookingService, manager)
         {
 
         }
